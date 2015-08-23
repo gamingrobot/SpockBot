@@ -40,7 +40,7 @@ PLAYER_JMP_ACC = 0.45
 import logging
 import math
 
-from spock.mcmap import mapdata
+from spock.mcdata import blocks
 from spock.plugins.base import PluginBase
 from spock.utils import BoundingBox, Position, pl_announce
 from spock.vector import Vector3
@@ -126,7 +126,7 @@ class PhysicsPlugin(PluginBase):
 
     def block_collision(self, cb, x=0, y=0, z=0):
         block_id, meta = self.world.get_block(cb.x + x, cb.y + y, cb.z + z)
-        block = mapdata.get_block(block_id, meta)
+        block = blocks.get_block(block_id, meta)
         if block is None:
             return False
         # possibly we want to use the centers of blocks as the starting

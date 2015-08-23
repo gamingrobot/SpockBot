@@ -1,7 +1,7 @@
 """
 ALL THE UTILS!
 """
-# silly python2
+import collections
 import copy
 
 from spock.vector import Vector3
@@ -97,6 +97,25 @@ class BoundBuffer(object):
 
     recv = read
     append = write
+
+
+def create_namedtuple(mapping, replacements=None, name="Container"):
+    if isinstance(mapping, collections.Mapping):
+        if replacements:
+            for old, new in replacements.items():
+                if old in mapping:
+                    mapping[new] = mapping.pop(old)
+        for key, value in mapping.items():
+            mapping[key] = create_namedtuple(value, replacements)
+        try:
+            return collections.namedtuple(name, mapping.keys())(**mapping)
+        except ValueError:
+            return mapping
+    elif isinstance(mapping, list):
+        for index, value in enumerate(mapping):
+            mapping[index] = create_namedtuple(value, replacements)
+        return tuple(mapping)
+    return mapping
 
 
 def pl_announce(*args):
